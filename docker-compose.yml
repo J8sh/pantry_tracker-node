@@ -1,0 +1,36 @@
+services:
+  mysqldb:
+    image: mysql:5.7
+    container_name: mysql
+    restart: unless-stopped
+    volumes:
+      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+    ports: 
+      - '3307:3306'
+    environment:
+      MYSQL_DATABASE: pantry_trackerdb
+      MYSQL_USER: josh
+      MYSQL_PASSWORD: josh
+      MYSQL_ROOT_PASSWORD: josh
+    healthcheck:
+      test: [
+        "CMD", 
+        "mysqladmin",
+        "ping",
+        "-h",
+        "localhost",
+        "-ujosh",
+        "-pjosh",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    
+  # phpmyadmin:
+  #   image: phpmyadmin:latest
+  #   container_name: phpmyadmin
+  #   restart: unless-stopped
+  #   ports:
+  #     - '8080:80'
+  #   environment:
+  #     PMA_ARBITRARY: 1

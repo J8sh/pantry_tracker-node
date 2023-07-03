@@ -1,0 +1,13 @@
+CREATE DATABASE IF NOT EXISTS pantry_trackerdb;
+
+USE pantry_trackerdb;
+
+DROP TABLE IF EXISTS ingredients;
+
+CREATE TABLE ingredients (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL, 
+    amount INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
