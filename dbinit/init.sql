@@ -3,11 +3,24 @@ CREATE DATABASE IF NOT EXISTS pantry_trackerdb;
 USE pantry_trackerdb;
 
 DROP TABLE IF EXISTS ingredients;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE ingredients (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INTEGER,
     name VARCHAR(255) NOT NULL, 
     amount INTEGER,
+    expiration_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
+

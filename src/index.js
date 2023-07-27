@@ -4,8 +4,12 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import Response from './domain/response.js';
 import HttpStatus from './controller/ingredient.controller.js';
+// import UserHttpStatus from './controller/user.controller.js';
 import ingredientRoutes from './route/ingredient.route.js';
+import userRoutes from './route/user.route.js';
 import logger from './util/logger.js';
+
+//import { getUsers, createUser, getUser, deleteUser, updateUser } from './controller/user.controller.js';
 
 dotenv.config();
 const PORT = process.env.SERVER_PORT || 3001;
@@ -15,6 +19,8 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
 app.use('/ingredients', ingredientRoutes);
+app.use('/user', userRoutes);
+
 app.get('/', (req, res) => res.send( new Response(HttpStatus.OK.code, HttpStatus.OK.status, 'Ingredient API, v1.0.0 - All Systems Go')));
 // routes not created
 app.all('*', (req, res) => res.status(HttpStatus.NOT_FOUND.code).send( new Response(HttpStatus.NOT_FOUND.code, HttpStatus.NOT_FOUND.status, 'Route does not exist on the server')));
