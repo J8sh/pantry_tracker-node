@@ -9,17 +9,59 @@ import ingredientRoutes from './route/ingredient.route.js';
 import userRoutes from './route/user.route.js';
 import logger from './util/logger.js';
 
-//import { getUsers, createUser, getUser, deleteUser, updateUser } from './controller/user.controller.js';
+import session from 'express-session';
+import MySQLStore from 'express-mysql-session';
+import mysql from 'mysql';
+
+// const session = require("express-session");
+// const MySQLStore = require("express-mysql-session");
+// const mysql = require("mysql");
+
 
 dotenv.config();
+
 const PORT = process.env.SERVER_PORT || 3001;
 const app = express();
-// change later? 
+
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
+var options = {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+}
+
+var sessionConnection = mysql.createConnection(options);
+var sessionStore = new MySQLStore({
+    expiration: 300000,
+    createDatabaseTable: true,
+    schema:{
+        tableName: 'sessiontbl',
+        columnNames:{
+            session_id: 'session_id',
+            expires: 'expires',
+            data: 'data'
+        }
+    }
+}, sessionConnection);
+
+app.use( session({
+    key: 'keyin',
+    secret: 'my secret',
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: true
+}));
+
 app.use('/ingredients', ingredientRoutes);
 app.use('/user', userRoutes);
+
+app.use('/recipes', (req, res) => {
+    console.log(req.params)
+})
 
 app.get('/', (req, res) => res.send( new Response(HttpStatus.OK.code, HttpStatus.OK.status, 'Ingredient API, v1.0.0 - All Systems Go')));
 // routes not created

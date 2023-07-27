@@ -25,6 +25,8 @@ export const getUsers = (req, res) => {
 
 export const createUser = (req, res) => {
     Logger.info(`${req.method}, creating user`);
+    // hash password here
+    
     database.query(QUERY.CREATE_USER, Object.values(req.body), (error, results) => {
         if(!results){
             Logger.error(error.message);
@@ -44,6 +46,7 @@ export const getUser = (req, res) => {
             res.status(HttpStatus.NOT_FOUND.code).send(new Response(HttpStatus.NOT_FOUND.code, HttpStatus.NOT_FOUND.status, `User by email ${req.params.email} was not found or password did not work`));
         }else{
             // session
+
             res.status(HttpStatus.OK.code).send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `user retrieved`, results ));
         }
     })
