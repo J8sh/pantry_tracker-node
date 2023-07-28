@@ -24,3 +24,13 @@ CREATE TABLE ingredients (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE recipes (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INTEGER,
+    name VARCHAR(255) NOT NULL, 
+    image VARCHAR(255),
+    expiration_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
