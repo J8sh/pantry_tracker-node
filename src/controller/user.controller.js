@@ -46,8 +46,19 @@ export const getUser = (req, res) => {
             res.status(HttpStatus.NOT_FOUND.code).send(new Response(HttpStatus.NOT_FOUND.code, HttpStatus.NOT_FOUND.status, `User by email ${req.params.email} was not found or password did not work`));
         }else{
             // session
-
-            res.status(HttpStatus.OK.code).send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `user retrieved`, results ));
+            req.session.regenerate(function (err) {
+                if (err) next(err)
+            
+                // store user information in session, typically a user id
+                req.session.user = results[0]
+            
+                // save the session before redirection to ensure page
+                // load does not happen before session is saved
+                req.session.save(function (err) {
+                    if (err) return next(err)
+                    res.status(HttpStatus.OK.code).send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `user retrieved`, results ));
+                })
+            })
         }
     })
 }
